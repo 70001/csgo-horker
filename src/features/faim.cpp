@@ -34,6 +34,29 @@ bool FAim::GetBonePosition(uintptr_t ePtr, int bone, Vector *out)
     return true;
 }
 
+
+bool CBaseEntity::IsVisible(int bone)
+{
+	Ray_t ray;
+	trace_t tr;
+	m_visible = false;
+	ray.Init(G::LocalPlayer->GetEyePosition(), this->GetBonePosition(bone));
+
+	CTraceFilter filter;
+	filter.pSkip = G::LocalPlayer;
+
+	I::EngineTrace->TraceRay(ray, MASK_NPCWORLDSTATIC | CONTENTS_SOLID | CONTENTS_MOVEABLE | CONTENTS_MONSTER | CONTENTS_WINDOW | CONTENTS_DEBRIS | CONTENTS_HITBOX, &filter, &tr);
+
+	if (tr.m_pEnt == this || tr.fraction>0.99f)
+	{
+		m_visible = true;
+		return true;
+	}
+
+	return false;
+}
+
+
 void FAim::Recoil(uintptr_t localPlayer, bool forceReset)
 {
     if (!Config::AimBot::RecoilControl) return;
@@ -142,6 +165,10 @@ void FAim::Aim(uintptr_t localPlayer, int myTeam)
         if (ent.m_iTeamNum == myTeam && !Config::AimBot::AttackTeammate)
             continue;
         if (ent.m_iHealth < 1) {
+            continue;
+        }
+        
+        if (IsVisible(bone) != true) {
             continue;
         }
 
