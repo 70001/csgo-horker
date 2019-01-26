@@ -35,7 +35,7 @@ bool FAim::GetBonePosition(uintptr_t ePtr, int bone, Vector *out)
 }
 
 
-bool CBaseEntity::IsVisible(int bone)
+bool FAim::IsVisible(int bone)
 {
 	Ray_t ray;
 	trace_t tr;
