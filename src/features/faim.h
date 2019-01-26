@@ -23,6 +23,7 @@ class FAim : public FBase {
         void Recoil(uintptr_t localPlayer, bool forceReset = false);
         void DoTrigger();
         bool GetBonePosition(uintptr_t ePtr, int bone, Vector *out);
+        bool IsVisible( int bone );
         size_t m_nTick = 0;
         std::chrono::time_point<std::chrono::high_resolution_clock> m_nLastTick;
         Vector m_vecOldPunchAngle;
